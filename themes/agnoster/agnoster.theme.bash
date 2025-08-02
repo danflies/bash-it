@@ -182,7 +182,7 @@ prompt_segment() {
 	# declare -p codes
 
 	if [[ $CURRENT_BG != NONE && $1 != "$CURRENT_BG" ]]; then
-		declare -a intermediate=("$(fg_color $CURRENT_BG)" "$(bg_color "$1")")
+		declare -a intermediate=("$(fg_color "$CURRENT_BG")" "$(bg_color "$1")")
 		debug "pre prompt " "$(ansi intermediate[@])"
 		PR="$PR $(ansi intermediate[@])$SEGMENT_SEPARATOR"
 		debug "post prompt " "$(ansi codes[@])"
@@ -235,7 +235,8 @@ prompt_histdt() {
 }
 
 git_status_dirty() {
-	dirty=$(git status -s 2> /dev/null | tail -n 1)
+	local dirty
+	dirty=$(git status --porcelain 2> /dev/null | tail -n 1)
 	[[ -n $dirty ]] && echo " ●"
 }
 
